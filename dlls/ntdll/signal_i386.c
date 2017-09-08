@@ -464,6 +464,39 @@ typedef struct trapframe ucontext_t;
 #define FPU_sig(context)     ((FLOATING_SAVE_AREA *)&(context)->uc_mcontext.fpregs.fp_reg_set.fpchip_state)
 #define FPUX_sig(context)    NULL
 
+#elif defined(__HAIKU__)
+# include <sys/types.h>
+# include <signal.h>
+
+typedef ucontext_t SIGCONTEXT;
+
+#define EAX_sig(context) ((context)->uc_mcontext.eax)
+#define EBX_sig(context) ((context)->uc_mcontext.ebx)
+#define ECX_sig(context) ((context)->uc_mcontext.ecx)
+#define EDX_sig(context) ((context)->uc_mcontext.edx)
+#define ESI_sig(context) ((context)->uc_mcontext.esi)
+#define EDI_sig(context) ((context)->uc_mcontext.edi)
+#define EBP_sig(context) ((context)->uc_mcontext.ebp)
+#define ESP_sig(context) ((context)->uc_mcontext.esp)
+
+#define CS_sig(context) ((context)->uc_mcontext.xregs.state.new_format.fp_cs)
+#define DS_sig(context) ((context)->uc_mcontext.xregs.state.new_format.fp_ds)
+/*#define ES_sig(context) NULL*/
+/*#define SS_sig(context) NULL*/
+/*#define FS_sig(context) NULL*/
+/*#define GS_sig(context) NULL*/
+
+#define EFL_sig(context) ((context)->uc_mcontext.eflags)
+#define EIP_sig(context) ((context)->uc_mcontext.eip)
+/*#define TRAP_sig(context) NULL*/
+/*#define ERROR_sig(context) NULL*/
+
+#define FPU_sig(context) NULL
+#define FPUX_sig(context) NULL
+
+#define T_MCHK T_MCA
+#define T_XMMFLT T_XMM
+
 #else
 #error You must define the signal context functions for your platform
 #endif /* linux */
@@ -1007,8 +1040,12 @@ static inline void *init_handler( const ucontext_t *sigcontext, WORD *fs, WORD *
     }
 #endif
 
+#ifndef __HAIKU__
     if (!wine_ldt_is_system(CS_sig(sigcontext)) ||
         !wine_ldt_is_system(SS_sig(sigcontext)))  /* 16-bit mode */
+#else
+    if (!wine_ldt_is_system(CS_sig(sigcontext)))
+#endif
     {
         /*
          * Win16 or DOS protected mode. Note that during switch
@@ -1143,10 +1180,14 @@ static inline void save_context( CONTEXT *context, const ucontext_t *sigcontext,
     context->Esp          = ESP_sig(sigcontext);
     context->SegCs        = LOWORD(CS_sig(sigcontext));
     context->SegDs        = LOWORD(DS_sig(sigcontext));
+#ifndef __HAIKU__
     context->SegEs        = LOWORD(ES_sig(sigcontext));
+#endif
     context->SegFs        = fs;
     context->SegGs        = gs;
+#ifndef __HAIKU__
     context->SegSs        = LOWORD(SS_sig(sigcontext));
+#endif
     context->Dr0          = x86_thread_data()->dr0;
     context->Dr1          = x86_thread_data()->dr1;
     context->Dr2          = x86_thread_data()->dr2;
@@ -1198,8 +1239,10 @@ static inline void restore_context( const CONTEXT *context, ucontext_t *sigconte
     ESP_sig(sigcontext) = context->Esp;
     CS_sig(sigcontext)  = context->SegCs;
     DS_sig(sigcontext)  = context->SegDs;
+#ifndef __HAIKU__
     ES_sig(sigcontext)  = context->SegEs;
     SS_sig(sigcontext)  = context->SegSs;
+#endif
 #ifdef GS_sig
     GS_sig(sigcontext)  = context->SegGs;
 #else
@@ -1964,10 +2007,12 @@ static EXCEPTION_RECORD *setup_exception_record( ucontext_t *sigcontext, void *s
     EFL_sig(sigcontext) &= ~(0x100|0x400|0x40000);
     CS_sig(sigcontext)  = wine_get_cs();
     DS_sig(sigcontext)  = wine_get_ds();
+#ifndef __HAIKU__
     ES_sig(sigcontext)  = wine_get_es();
     FS_sig(sigcontext)  = wine_get_fs();
     GS_sig(sigcontext)  = wine_get_gs();
     SS_sig(sigcontext)  = wine_get_ss();
+#endif
 
     return stack->rec_ptr;
 }
