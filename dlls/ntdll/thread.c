@@ -45,6 +45,10 @@
 #include "ddk/wdm.h"
 #include "wine/exception.h"
 
+#ifdef __HAIKU__
+#include <stdio.h>
+#endif
+
 WINE_DEFAULT_DEBUG_CHANNEL(thread);
 WINE_DECLARE_DEBUG_CHANNEL(relay);
 
