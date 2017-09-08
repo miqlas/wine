@@ -2137,6 +2137,9 @@ AC_CHECK_FUNCS(\
 	socketpair \
 )
 
+dnl Check for -lnetwork for Haiku
+AC_SEARCH_LIBS(connect, network)
+
 dnl Check for clock_gettime which may be in -lrt
 ac_save_LIBS=$LIBS
 AC_SEARCH_LIBS(clock_gettime, rt,
