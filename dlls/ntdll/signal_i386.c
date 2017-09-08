@@ -2600,9 +2600,11 @@ void signal_init_process(void)
 #endif
 #endif
 
+#ifndef __HAIKU__
 #ifdef __HAVE_VM86
     sig_act.sa_sigaction = usr2_handler;
     if (sigaction( SIGUSR2, &sig_act, NULL ) == -1) goto error;
+#endif
 #endif
 
     wine_ldt_init_locking( ldt_lock, ldt_unlock );
