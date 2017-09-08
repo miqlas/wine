@@ -150,7 +150,8 @@ enum target_platform
     PLATFORM_APPLE,
     PLATFORM_FREEBSD,
     PLATFORM_SOLARIS,
-    PLATFORM_WINDOWS
+    PLATFORM_WINDOWS,
+    PLATFORM_HAIKU
 };
 
 extern char *target_alias;
