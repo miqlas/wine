@@ -180,7 +180,8 @@ static const struct
     { "cygwin",  PLATFORM_CYGWIN },
     { "mingw32", PLATFORM_WINDOWS },
     { "windows", PLATFORM_WINDOWS },
-    { "winnt",   PLATFORM_WINDOWS }
+    { "winnt",   PLATFORM_WINDOWS },
+    { "haiku",   PLATFORM_HAIKU }
 };
 
 struct options
@@ -242,6 +243,8 @@ static enum target_platform build_platform = PLATFORM_SOLARIS;
 static enum target_platform build_platform = PLATFORM_CYGWIN;
 #elif defined(_WIN32)
 static enum target_platform build_platform = PLATFORM_WINDOWS;
+#elif defined(__HAIKU__)
+static enum target_platform build_platform = PLATFORM_HAIKU;
 #else
 static enum target_platform build_platform = PLATFORM_UNSPECIFIED;
 #endif
@@ -1169,8 +1172,13 @@ static void build(struct options* opts)
 
     if (!opts->nostdlib) 
     {
-	strarray_add(link_args, "-lm");
-	strarray_add(link_args, "-lc");
+    	if (opts->target_platform == PLATFORM_HAIKU)
+    		strarray_add(link_args, "-lroot");
+    	else
+    	{		
+			strarray_add(link_args, "-lm");
+			strarray_add(link_args, "-lc");
+    	}
     }
 
     spawn(opts->prefix, link_args, 0);
