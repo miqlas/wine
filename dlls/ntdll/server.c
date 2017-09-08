@@ -1391,6 +1391,13 @@ void server_init_process(void)
     pthread_sigmask( SIG_BLOCK, &server_block_set, NULL );
 
     /* receive the first thread request fd on the main socket */
+    if (ntdll_get_thread_data())
+    	{
+    		fprintf(stderr,"!!!\n");
+    		fprintf(stderr,"%d\n", ntdll_get_thread_data());
+    	}
+    	else
+    		fprintf(stderr,"???\n");
     ntdll_get_thread_data()->request_fd = receive_fd( &version );
 
 #ifdef SO_PASSCRED
