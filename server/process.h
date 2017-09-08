@@ -31,6 +31,10 @@ struct job;
 /* process startup state */
 enum startup_state { STARTUP_IN_PROGRESS, STARTUP_DONE, STARTUP_ABORTED };
 
+#ifdef __HAIKU__
+	#define wait4(pid, status, options, rusage) waitpid(pid, status, options)
+#endif
+
 /* process structures */
 
 struct process_dll
