@@ -2187,6 +2187,7 @@ static void usr2_handler( int signal, siginfo_t *siginfo, void *sigcontext )
  *
  * Handler for SIGSEGV and related errors.
  */
+#ifndef __HAIKU__
 static void segv_handler( int signal, siginfo_t *siginfo, void *sigcontext )
 {
     WORD fs, gs;
@@ -2413,6 +2414,7 @@ static void usr1_handler( int signal, siginfo_t *siginfo, void *sigcontext )
     restore_context( &context, sigcontext );
 }
 
+#endif
 
 /***********************************************************************
  *           __wine_set_signal_handler   (NTDLL.@)
