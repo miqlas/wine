@@ -69,6 +69,8 @@ enum target_platform target_platform = PLATFORM_FREEBSD;
 enum target_platform target_platform = PLATFORM_SOLARIS;
 #elif defined(_WIN32)
 enum target_platform target_platform = PLATFORM_WINDOWS;
+#elif defined(__HAIKU__)
+enum target_platform target_platform = PLATFORM_HAIKU;
 #else
 enum target_platform target_platform = PLATFORM_UNSPECIFIED;
 #endif
@@ -123,7 +125,8 @@ static const struct
     { "solaris", PLATFORM_SOLARIS },
     { "mingw32", PLATFORM_WINDOWS },
     { "windows", PLATFORM_WINDOWS },
-    { "winnt",   PLATFORM_WINDOWS }
+    { "winnt",   PLATFORM_WINDOWS },
+    { "haiku",   PLATFORM_HAIKU }
 };
 
 /* set the dll file name from the input file name */
