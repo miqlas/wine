@@ -2573,6 +2573,7 @@ void signal_init_process(void)
     sig_act.sa_flags |= SA_RESTORER;
     sig_act.sa_restorer = rt_sigreturn;
 #endif
+#ifndef __HAIKU__
     sig_act.sa_sigaction = int_handler;
     if (sigaction( SIGINT, &sig_act, NULL ) == -1) goto error;
     sig_act.sa_sigaction = fpe_handler;
@@ -2585,6 +2586,7 @@ void signal_init_process(void)
     if (sigaction( SIGUSR1, &sig_act, NULL ) == -1) goto error;
 
     sig_act.sa_sigaction = segv_handler;
+#endif
     if (sigaction( SIGSEGV, &sig_act, NULL ) == -1) goto error;
     if (sigaction( SIGILL, &sig_act, NULL ) == -1) goto error;
 #ifdef SIGBUS
