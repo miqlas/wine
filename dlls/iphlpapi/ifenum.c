@@ -436,6 +436,15 @@ static DWORD getInterfaceMaskByName(const char *name)
   return ret;
 }
 
+#ifdef __HAIKU__
+static DWORD getInterfacePhysicalByName(const char *name, PDWORD len, PBYTE addr, PDWORD type)
+{
+	*len=0;
+	*type=0;
+	return ERROR_NOT_SUPPORTED;
+}
+#endif
+
 #if defined (SIOCGIFHWADDR) && defined (HAVE_STRUCT_IFREQ_IFR_HWADDR)
 static DWORD getInterfacePhysicalByName(const char *name, PDWORD len, PBYTE addr,
  PDWORD type)
