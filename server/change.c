@@ -280,8 +280,10 @@ static void dnotify_adjust_changes( struct dir *dir )
     int fd = get_unix_fd( dir->fd );
     unsigned int filter = dir->filter;
     unsigned int val;
+#ifndef __HAIKU__
     if ( 0 > fcntl( fd, F_SETSIG, SIGIO) )
         return;
+#endif
 
     val = DN_MULTISHOT;
     if (filter & FILE_NOTIFY_CHANGE_FILE_NAME)
@@ -310,7 +312,9 @@ static inline void insert_change( struct dir *dir )
     sigset_t sigset;
 
     sigemptyset( &sigset );
+#ifndef __HAIKU__
     sigaddset( &sigset, SIGIO );
+#endif
     sigprocmask( SIG_BLOCK, &sigset, NULL );
     list_add_head( &change_list, &dir->entry );
     sigprocmask( SIG_UNBLOCK, &sigset, NULL );
@@ -322,7 +326,9 @@ static inline void remove_change( struct dir *dir )
     sigset_t sigset;
 
     sigemptyset( &sigset );
+#ifndef __HAIKU__
     sigaddset( &sigset, SIGIO );
+#endif
     sigprocmask( SIG_BLOCK, &sigset, NULL );
     list_remove( &dir->entry );
     sigprocmask( SIG_UNBLOCK, &sigset, NULL );
