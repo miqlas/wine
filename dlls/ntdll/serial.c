@@ -286,8 +286,10 @@ static NTSTATUS get_line_control(int fd, SERIAL_LINE_CONTROL* slc)
     }
     switch (port.c_cflag & CSIZE)
     {
+    #ifndef __HAIKU__
     case CS5:   slc->WordLength = 5;    break;
     case CS6:   slc->WordLength = 6;    break;
+    #endif
     case CS7:   slc->WordLength = 7;	break;
     case CS8:	slc->WordLength = 8;	break;
     default: ERR("unknown size %x\n", (UINT)(port.c_cflag & CSIZE));
