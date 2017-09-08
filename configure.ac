@@ -2138,7 +2138,7 @@ AC_CHECK_FUNCS(\
 )
 
 dnl Check for -lnetwork for Haiku
-AC_SEARCH_LIBS(connect, network)
+AC_SEARCH_LIBS(socket, network)
 
 dnl Check for clock_gettime which may be in -lrt
 ac_save_LIBS=$LIBS
