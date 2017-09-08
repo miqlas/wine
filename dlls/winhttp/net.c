@@ -94,7 +94,9 @@ static int sock_get_error( int err )
         case EPROTOTYPE:        return WSAEPROTOTYPE;
         case ENOPROTOOPT:       return WSAENOPROTOOPT;
         case EPROTONOSUPPORT:   return WSAEPROTONOSUPPORT;
+        #ifndef __HAIKU__
         case ESOCKTNOSUPPORT:   return WSAESOCKTNOSUPPORT;
+        #endif
         case EOPNOTSUPP:        return WSAEOPNOTSUPP;
         case EPFNOSUPPORT:      return WSAEPFNOSUPPORT;
         case EAFNOSUPPORT:      return WSAEAFNOSUPPORT;
@@ -110,7 +112,9 @@ static int sock_get_error( int err )
         case EISCONN:           return WSAEISCONN;
         case ENOTCONN:          return WSAENOTCONN;
         case ESHUTDOWN:         return WSAESHUTDOWN;
+        #ifndef __HAIKU__
         case ETOOMANYREFS:      return WSAETOOMANYREFS;
+        #endif
         case ETIMEDOUT:         return WSAETIMEDOUT;
         case ECONNREFUSED:      return WSAECONNREFUSED;
         case ELOOP:             return WSAELOOP;
