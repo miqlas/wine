@@ -1382,7 +1382,9 @@ void server_init_process(void)
     /* setup the signal mask */
     sigemptyset( &server_block_set );
     sigaddset( &server_block_set, SIGALRM );
+    #ifndef __HAIKU__
     sigaddset( &server_block_set, SIGIO );
+    #endif
     sigaddset( &server_block_set, SIGINT );
     sigaddset( &server_block_set, SIGHUP );
     sigaddset( &server_block_set, SIGUSR1 );
