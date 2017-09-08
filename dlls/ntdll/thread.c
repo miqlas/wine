@@ -45,10 +45,6 @@
 #include "ddk/wdm.h"
 #include "wine/exception.h"
 
-#ifdef __HAIKU__
-#include <stdio.h>
-#endif
-
 WINE_DEFAULT_DEBUG_CHANNEL(thread);
 WINE_DECLARE_DEBUG_CHANNEL(relay);
 
@@ -348,8 +344,8 @@ HANDLE thread_init(void)
 
     thread_data = (struct ntdll_thread_data *)&teb->GdiTebBatch;
     #ifdef __HAIKU__
-    fprintf(stderr,"00 %d\n",thread_data->fs);
-    fprintf(stderr,"01 %d\n",thread_data->gs);
+    fprintf(stderr,"00 %08x\n",thread_data->fs);
+    fprintf(stderr,"01 %08x\n",thread_data->gs);
     #endif
     thread_data->request_fd = -1;
     thread_data->reply_fd   = -1;
