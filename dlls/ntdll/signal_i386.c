@@ -2593,9 +2593,11 @@ void signal_init_process(void)
     if (sigaction( SIGBUS, &sig_act, NULL ) == -1) goto error;
 #endif
 
+#ifndef __HAIKU__
 #ifdef SIGTRAP
     sig_act.sa_sigaction = trap_handler;
     if (sigaction( SIGTRAP, &sig_act, NULL ) == -1) goto error;
+#endif
 #endif
 
 #ifdef __HAVE_VM86
