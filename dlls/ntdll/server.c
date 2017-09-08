@@ -1391,6 +1391,7 @@ void server_init_process(void)
     pthread_sigmask( SIG_BLOCK, &server_block_set, NULL );
 
     /* receive the first thread request fd on the main socket */
+    #ifndef __HAIKU__
     if (ntdll_get_thread_data())
     	{
     		fprintf(stderr,"!!!\n");
@@ -1398,6 +1399,7 @@ void server_init_process(void)
     	}
     	else
     		fprintf(stderr,"???\n");
+    #endif
     ntdll_get_thread_data()->request_fd = receive_fd( &version );
 
 #ifdef SO_PASSCRED
