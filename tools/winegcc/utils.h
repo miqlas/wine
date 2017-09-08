@@ -47,7 +47,8 @@ enum target_platform
     PLATFORM_ANDROID,
     PLATFORM_SOLARIS,
     PLATFORM_WINDOWS,
-    PLATFORM_CYGWIN
+    PLATFORM_CYGWIN,
+    PLATFORM_HAIKU
 };
 
 void error(const char* s, ...) DECLSPEC_NORETURN;
